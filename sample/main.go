@@ -17,6 +17,7 @@ func main() {
 		log.Print(err)
 		return
 	}
+	pp.Println(token)
 	fmt.Printf("AccessToken : %s\n", *token.AccessToken)
 
 	// ------

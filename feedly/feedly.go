@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
+
+	"github.com/k0kubun/pp"
 )
 
 const (
@@ -55,14 +58,31 @@ func (f *Feedly) createURI(suburl string) string {
 func (f *Feedly) request(method string, suburl string, v interface{}, param url.Values) (interface{}, error) {
 	client := &http.Client{}
 	u := f.createURI(suburl)
-	req, err := http.NewRequest(method, u, nil)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to create request (%s) : %v", u, err)
+	res := &http.Response{}
+
+	switch method {
+	case "GET":
+		req, err := http.NewRequest(method, u, strings.NewReader(param.Encode()))
+		if err != nil {
+			return nil, fmt.Errorf("Unable to create request (%s) : %v", u, err)
+		}
+		req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
+		var resErr error
+		res, resErr = client.Do(req)
+		if resErr != nil {
+			return nil, fmt.Errorf("Unable to fetch url (%s) : %v", u, resErr)
+		}
+	case "POST":
+		var resErr error
+		res, resErr = http.PostForm(u, param)
+		if resErr != nil {
+			return nil, fmt.Errorf("Unable to postform (%s) : %v", u, resErr)
+		}
 	}
-	req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
-	res, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("Unable to fetch url (%s) : %v", u, err)
+
+	if res.StatusCode == 400 {
+		byteArray, _ := ioutil.ReadAll(res.Body)
+		return nil, fmt.Errorf("Bad request (%s) : %s", u, string(byteArray))
 	}
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&v); err != nil {
@@ -78,6 +98,7 @@ func (f *Feedly) Auth() (AuthTokenResponse, error) {
 	if err != nil {
 		return result, fmt.Errorf("Fail to getCode : %v", err)
 	}
+	pp.Println(code)
 	result, err = f.getAccessToken(code)
 	if err != nil {
 		return result, fmt.Errorf("Fail to getAccessToken : %v", err)
@@ -119,14 +140,17 @@ func (f *Feedly) getCode() (string, error) {
 }
 
 func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
-	at := AuthTokenResponse{}
+	at := &AuthTokenResponse{}
 
 	// キャッシュから読み込む
 	file, e := os.Open(tokensFile)
 	defer file.Close()
 
 	if os.IsNotExist(e) {
-		resp, err := http.PostForm(f.createURI(accessTokenURI),
+		_, err := f.request(
+			"POST",
+			accessTokenURI,
+			at,
 			url.Values{
 				"client_id":     {clientID},
 				"client_secret": {"0XP4XQ07VVMDWBKUHTJM4WUQ"},
@@ -136,20 +160,20 @@ func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
 			},
 		)
 		if err != nil {
-			return at, fmt.Errorf("Unable to postform : %v", err)
-		}
-		defer resp.Body.Close()
-		if err := json.NewDecoder(resp.Body).Decode(&at); err != nil {
-			return at, fmt.Errorf("Unable to decode : %v", err)
+			return *at, fmt.Errorf("Unable to postform : %v", err)
 		}
 		// キャッシュ処理
-		text, _ := json.Marshal(&at)
+		text, err := json.Marshal(&at)
+		if err != nil {
+			return *at, fmt.Errorf("Unable to convert authTokenResponse : %v", err)
+		}
 		ioutil.WriteFile(tokensFile, text, 0777)
 	} else {
 		if err := json.NewDecoder(file).Decode(&at); err != nil {
-			return at, fmt.Errorf("Unable to decode : %v", err)
+			return *at, fmt.Errorf("Unable to decode : %v", err)
 		}
 	}
-	f.authToken = &at
-	return at, nil
+	f.authToken = at
+	pp.Println(at)
+	return *at, nil
 }
