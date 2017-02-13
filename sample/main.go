@@ -20,22 +20,12 @@ func main() {
 
 	// ------
 
-	// // カテゴリ取得
-	// profile, err := feedly.MarkersCount()
-	// if err != nil {
-	// 	log.Print(err)
-	// 	return
-	// }
-	// pp.Print(profile)
-
-	// ----
-
-	// 全件の stream 取得
-	stream, err := feedly.StreamContent("user/103c35b9-edc0-449f-94da-800ff8b483a9/category/IT全般")
+	// カテゴリ取得
+	profile, err := feedly.MarkersCount()
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	pp.Print(stream)
+	pp.Print(profile)
 
 }
