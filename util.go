@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os/exec"
 	"runtime"
 )
@@ -19,4 +20,9 @@ func OpenBrowser(url string) error {
 		return fmt.Errorf("Unable to open on %s", runtime.GOOS)
 	}
 	return nil
+}
+
+func writeFile(fileName string, text string) error {
+	err := ioutil.WriteFile(fileName, []byte(text), 0777)
+	return err
 }

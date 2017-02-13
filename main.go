@@ -17,11 +17,11 @@ func main() {
 	}
 	fmt.Printf("AccessToken : %s\n", token.AccessToken)
 
-	// marker counts を取得してみる
-	m, err := getMarkersCount(token.AccessToken)
-	if err != nil {
-		fmt.Print(err)
-		return
-	}
-	fmt.Print(m)
+	// // marker counts を取得してみる
+	// m, err := getMarkersCount(token.AccessToken)
+	// if err != nil {
+	// 	fmt.Print(err)
+	// 	return
+	// }
+	// fmt.Print(m)
 }
