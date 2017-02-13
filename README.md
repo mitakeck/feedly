@@ -31,3 +31,24 @@ https://developer.feedly.com/v3/markers/
 markers, err := feedly.Markers()
 fmt.Print(markers)
 ```
+
+## TODO
+
+- [x] Authentication
+- [x] Categories
+- [ ] Dropbox
+- [ ] Entries
+- [ ] Evernote
+- [ ] Facebook
+- [ ] Feeds
+- [x] Markers
+- [ ] Microsoft
+- [ ] Mixes
+- [ ] OPML
+- [ ] Preferences
+- [x] Profile
+- [ ] Search
+- [ ] Streams
+- [x] Subscriptions
+- [ ] Tags
+- [ ] Twitter
