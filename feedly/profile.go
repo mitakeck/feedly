@@ -22,8 +22,5 @@ type ProfileResponse struct {
 func (f *Feedly) Profile() (ProfileResponse, error) {
 	result := &ProfileResponse{}
 	_, err := f.request("GET", profileURI, result, url.Values{})
-	if err != nil {
-		return *result, err
-	}
-	return *result, nil
+	return *result, err
 }

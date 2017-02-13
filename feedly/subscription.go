@@ -21,8 +21,5 @@ type SubscriptionsResponse []struct {
 func (f Feedly) Subscriptions() (SubscriptionsResponse, error) {
 	result := &SubscriptionsResponse{}
 	_, err := f.request("GET", subscriptionsURI, result, url.Values{})
-	if err != nil {
-		return *result, err
-	}
-	return *result, nil
+	return *result, err
 }

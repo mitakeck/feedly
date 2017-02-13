@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/k0kubun/pp"
@@ -18,15 +17,25 @@ func main() {
 		return
 	}
 	pp.Println(token)
-	fmt.Printf("AccessToken : %s\n", *token.AccessToken)
 
 	// ------
 
-	// カテゴリ取得
-	profile, err := feedly.Categories()
+	// // カテゴリ取得
+	// profile, err := feedly.MarkersCount()
+	// if err != nil {
+	// 	log.Print(err)
+	// 	return
+	// }
+	// pp.Print(profile)
+
+	// ----
+
+	// 全件の stream 取得
+	stream, err := feedly.StreamContent("user/103c35b9-edc0-449f-94da-800ff8b483a9/category/IT全般")
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	pp.Print(profile)
+	pp.Print(stream)
+
 }

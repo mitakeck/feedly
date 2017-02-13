@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -56,6 +57,7 @@ func (f *Feedly) createURI(suburl string) string {
 func (f *Feedly) request(method string, suburl string, v interface{}, param url.Values) (interface{}, error) {
 	client := &http.Client{}
 	u := f.createURI(suburl)
+	log.Printf("http request %s (%s)\n", method, u)
 	res := &http.Response{}
 
 	switch method {
@@ -84,7 +86,7 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 	}
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&v); err != nil {
-		return nil, fmt.Errorf("Unable to convert profile json : %v", err)
+		return nil, fmt.Errorf("Unable to decode json : %v", err)
 	}
 	return v, nil
 }

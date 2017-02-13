@@ -13,8 +13,5 @@ type CategoriesResponse []struct {
 func (f *Feedly) Categories() (CategoriesResponse, error) {
 	result := &CategoriesResponse{}
 	_, err := f.request("GET", categoriesURI, result, url.Values{})
-	if err != nil {
-		return *result, err
-	}
-	return *result, nil
+	return *result, err
 }
