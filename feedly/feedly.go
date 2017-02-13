@@ -9,8 +9,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-
-	"github.com/k0kubun/pp"
 )
 
 const (
@@ -98,7 +96,6 @@ func (f *Feedly) Auth() (AuthTokenResponse, error) {
 	if err != nil {
 		return result, fmt.Errorf("Fail to getCode : %v", err)
 	}
-	pp.Println(code)
 	result, err = f.getAccessToken(code)
 	if err != nil {
 		return result, fmt.Errorf("Fail to getAccessToken : %v", err)
@@ -174,6 +171,5 @@ func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
 		}
 	}
 	f.authToken = at
-	pp.Println(at)
 	return *at, nil
 }
