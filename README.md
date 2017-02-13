@@ -37,7 +37,7 @@ fmt.Print(markers)
 - [x] Authentication
 - [x] Categories
 - [ ] Dropbox
-- [ ] Entries
+- [x] Entries
 - [ ] Evernote
 - [ ] Facebook
 - [ ] Feeds
@@ -48,7 +48,7 @@ fmt.Print(markers)
 - [ ] Preferences
 - [x] Profile
 - [ ] Search
-- [ ] Streams
+- [x] Streams
 - [x] Subscriptions
 - [ ] Tags
 - [ ] Twitter
