@@ -52,7 +52,7 @@ func (f *Feedly) createURI(suburl string) string {
 }
 
 // JSON 取得処理
-func (f *Feedly) fetch(method string, suburl string, v interface{}) (interface{}, error) {
+func (f *Feedly) request(method string, suburl string, v interface{}, param url.Values) (interface{}, error) {
 	client := &http.Client{}
 	u := f.createURI(suburl)
 	req, err := http.NewRequest(method, u, nil)
@@ -91,8 +91,7 @@ func (f *Feedly) getCode() (string, error) {
 	defer file.Close()
 
 	if os.IsNotExist(e) {
-		f.OpenBrowser(authenticateURI + "?client_id=" + clientID + "&redirect_uri=http://" + redirectURI + "&scope=" + scope + "&response_type=code&provider=" + provider + "&migrate=false")
-
+		f.OpenBrowser(f.createURI(authenticateURI) + "?client_id=" + clientID + "&redirect_uri=http://" + redirectURI + "&scope=" + scope + "&response_type=code&provider=" + provider + "&migrate=false")
 		l, err := net.Listen("tcp", redirectURI)
 		if err != nil {
 			return "", fmt.Errorf("Unable to listen (%s): %v", redirectURI, err)
@@ -125,9 +124,9 @@ func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
 	// キャッシュから読み込む
 	file, e := os.Open(tokensFile)
 	defer file.Close()
-	fmt.Print(e)
+
 	if os.IsNotExist(e) {
-		resp, err := http.PostForm(accessTokenURI,
+		resp, err := http.PostForm(f.createURI(accessTokenURI),
 			url.Values{
 				"client_id":     {clientID},
 				"client_secret": {"0XP4XQ07VVMDWBKUHTJM4WUQ"},

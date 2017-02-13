@@ -1,5 +1,7 @@
 package feedly
 
+import "net/url"
+
 // CategoriesResponse : GET /v3/categories
 type CategoriesResponse []struct {
 	Label       string `json:"label"`
@@ -10,7 +12,7 @@ type CategoriesResponse []struct {
 // Categories : https://developer.feedly.com/v3/categories/
 func (f *Feedly) Categories() (CategoriesResponse, error) {
 	result := &CategoriesResponse{}
-	_, err := f.fetch("GET", categoriesURI, result)
+	_, err := f.request("GET", categoriesURI, result, url.Values{})
 	if err != nil {
 		return *result, err
 	}

@@ -1,5 +1,7 @@
 package feedly
 
+import "net/url"
+
 // MarkersConuntsResponse : GET /v3/markers/counts
 type MarkersConuntsResponse struct {
 	Unreadcounts []struct {
@@ -13,6 +15,6 @@ type MarkersConuntsResponse struct {
 // MarkersCount : https://developer.feedly.com/v3/markers/
 func (f *Feedly) MarkersCount() (MarkersConuntsResponse, error) {
 	result := &MarkersConuntsResponse{}
-	f.fetch("GET", markerCountURI, result)
+	f.request("GET", markerCountURI, result, url.Values{})
 	return *result, nil
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // OpenBrowser : 指定 URL をブラウザで開く処理
-func (f Feedly) OpenBrowser(url string) error {
+func (f *Feedly) OpenBrowser(url string) error {
 	switch runtime.GOOS {
 	case "linux":
 		exec.Command("xdg-open", url).Start()

@@ -1,5 +1,7 @@
 package feedly
 
+import "net/url"
+
 // ProfileResponse : GET /v3/profile
 type ProfileResponse struct {
 	Gender     string `json:"gender"`
@@ -19,7 +21,7 @@ type ProfileResponse struct {
 // Profile : https://developer.feedly.com/v3/profile/
 func (f *Feedly) Profile() (ProfileResponse, error) {
 	result := &ProfileResponse{}
-	_, err := f.fetch("GET", profileURI, result)
+	_, err := f.request("GET", profileURI, result, url.Values{})
 	if err != nil {
 		return *result, err
 	}

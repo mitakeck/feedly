@@ -1,5 +1,7 @@
 package feedly
 
+import "net/url"
+
 // SubscriptionsResponse : GET /v3/subscriptions
 type SubscriptionsResponse []struct {
 	Updated    int64  `json:"updated"`
@@ -18,7 +20,7 @@ type SubscriptionsResponse []struct {
 // Subscriptions : https://developer.feedly.com/v3/subscriptions/
 func (f Feedly) Subscriptions() (SubscriptionsResponse, error) {
 	result := &SubscriptionsResponse{}
-	_, err := f.fetch("GET", subscriptionsURI, result)
+	_, err := f.request("GET", subscriptionsURI, result, url.Values{})
 	if err != nil {
 		return *result, err
 	}
