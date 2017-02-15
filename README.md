@@ -1,5 +1,5 @@
-# feedly-go
-feedly cloud api wrapper
+# feedly
+feedly cloud api wrapper for golang
 
 ## Usage
 
