@@ -28,6 +28,7 @@ const (
 	searchURL        = "search/feeds"
 	mixesURL         = "mixes/contents"
 	tagURL           = "tags"
+	feedURL          = "feeds"
 
 	tokensFile = ".feedly-token"
 	codeFile   = ".feedly-code"
