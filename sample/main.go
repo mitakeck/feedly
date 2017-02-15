@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/k0kubun/pp"
-	"github.com/mitakeck/feedly-go/feedly"
+	"github.com/mitakeck/feedly/feedly"
 )
 
 func main() {
