@@ -92,7 +92,7 @@ func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
 			return *at, fmt.Errorf("Unable to postform : %v", err)
 		}
 		// キャッシュ処理
-		text, err := json.Marshal(&at)
+		text, err := json.MarshalIndent(&at, "", " ")
 		if err != nil {
 			return *at, fmt.Errorf("Unable to convert authTokenResponse : %v", err)
 		}
