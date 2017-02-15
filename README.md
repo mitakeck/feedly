@@ -40,15 +40,15 @@ fmt.Print(markers)
 - [x] Entries
 - [ ] Evernote
 - [ ] Facebook
-- [ ] Feeds
+- [x] Feeds
 - [x] Markers
 - [ ] Microsoft
-- [ ] Mixes
+- [x] Mixes
 - [ ] OPML
 - [ ] Preferences
 - [x] Profile
 - [x] Search
 - [x] Streams
 - [x] Subscriptions
-- [ ] Tags
+- [x] Tags
 - [ ] Twitter
