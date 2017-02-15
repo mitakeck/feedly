@@ -49,9 +49,14 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 
 	switch method {
 	case "GET":
-		req, err := http.NewRequest(method, u, strings.NewReader(param.Encode()))
+		url, err := url.Parse(u)
 		if err != nil {
-			return nil, fmt.Errorf("Unable to create request (%s) : %v", u, err)
+			return nil, fmt.Errorf("Unable to parse url (%s) : %v", u, err)
+		}
+		url.RawQuery = param.Encode()
+		req, err := http.NewRequest(method, url.String(), strings.NewReader(param.Encode()))
+		if err != nil {
+			return nil, fmt.Errorf("Unable to create request (%s) : %v", url.String(), err)
 		}
 		req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
 		var resErr error
