@@ -20,8 +20,8 @@ func main() {
 
 	// ------
 
-	// カテゴリ取得
-	profile, err := feedly.MarkersCount()
+	// Search : golang
+	profile, err := feedly.Search("golang")
 	if err != nil {
 		log.Print(err)
 		return

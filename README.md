@@ -47,7 +47,7 @@ fmt.Print(markers)
 - [ ] OPML
 - [ ] Preferences
 - [x] Profile
-- [ ] Search
+- [x] Search
 - [x] Streams
 - [x] Subscriptions
 - [ ] Tags
