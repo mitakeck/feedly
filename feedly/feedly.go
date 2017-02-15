@@ -25,6 +25,7 @@ const (
 	markerCountURI   = "markers/counts"
 	subscriptionsURI = "subscriptions"
 	categoriesURI    = "categories"
+	searchURL        = "search/feeds"
 
 	tokensFile = ".feedly-token"
 	codeFile   = ".feedly-code"
