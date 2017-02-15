@@ -26,6 +26,7 @@ const (
 	subscriptionsURI = "subscriptions"
 	categoriesURI    = "categories"
 	searchURL        = "search/feeds"
+	mixesURL         = "mixes/contents"
 
 	tokensFile = ".feedly-token"
 	codeFile   = ".feedly-code"
