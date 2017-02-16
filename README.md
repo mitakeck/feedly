@@ -1,7 +1,9 @@
 # feedly
-feedly cloud api wrapper for golang
+feedly cloud api wrapper for golang : https://developer.feedly.com/
 
 ## Usage
+
+more sample is [here](https://github.com/mitakeck/feedly/blob/master/cmd/feedly/main.go)
 
 ### Authentication
 

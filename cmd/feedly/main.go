@@ -1,36 +1,42 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"strings"
 
-	"github.com/k0kubun/pp"
 	"github.com/mitakeck/feedly"
 )
 
 func main() {
+
+	// Auth
 	feedly := feedly.Feedly{}
+	feedly.Auth()
 
-	// Feedly 認証
-	token, err := feedly.Auth()
-	if err != nil {
-		log.Print(err)
-		return
+	// get profile
+	profile, _ := feedly.Profile()
+	fmt.Println("Auth : " + profile.Email)
+
+	// get markers
+	markers, _ := feedly.MarkersCount()
+
+	// get grobal all stream id
+	var grobalStreamID string
+	for _, marker := range markers.Unreadcounts {
+		if strings.HasSuffix(marker.ID, "global.all") {
+			grobalStreamID = marker.ID
+			break
+		}
 	}
-	pp.Println(token)
 
-	// ------
+	// get grobal all stream content
+	streams, _ := feedly.StreamContent(grobalStreamID)
 
-	// Search : golang
-	search, err := feedly.Search("golang")
-	if err != nil {
-		log.Print(err)
-		return
+	// show feed content
+	for _, item := range streams.Items {
+		fmt.Printf("[%s](%s)\n", item.Title, item.Alternate[0].Href)
 	}
-	pp.Print(search)
 
-	// ------
-
-	// Download OPML
+	// download OPML
 	feedly.OPML("opml.xml")
-
 }
