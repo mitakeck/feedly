@@ -3,10 +3,12 @@ package feedly
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -29,6 +31,7 @@ const (
 	mixesURL         = "mixes/contents"
 	tagURL           = "tags"
 	feedURL          = "feeds"
+	opmlURL          = "opml"
 
 	tokensFile = ".feedly-token"
 	codeFile   = ".feedly-code"
@@ -85,4 +88,39 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 		return nil, fmt.Errorf("Unable to decode json : %v", err)
 	}
 	return v, nil
+}
+
+func (f *Feedly) Download(suburl string, fileName string) (int64, error) {
+	output, err := os.Create(fileName)
+	if err != nil {
+		return 0, fmt.Errorf("Error while creating %s : %v", fileName, err)
+	}
+
+	defer output.Close()
+	u := f.createURI(suburl)
+	url, err := url.Parse(u)
+
+	if err != nil {
+		return 0, fmt.Errorf("Unable to parse url (%s) : %v", u, err)
+	}
+
+	req, err := http.NewRequest("GET", url.String(), nil)
+	if err != nil {
+		return 0, fmt.Errorf("Unable to create request (%s) : %v", url.String(), err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
+	client := &http.Client{}
+	res, resErr := client.Do(req)
+	if resErr != nil {
+		return 0, fmt.Errorf("Error while downloading %s : %v", url, err)
+	}
+	defer res.Body.Close()
+
+	n, err := io.Copy(output, res.Body)
+	if err != nil {
+		return 0, fmt.Errorf("Error while downloading %s : %v", url, err)
+	}
+
+	return n, nil
 }
