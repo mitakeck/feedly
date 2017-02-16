@@ -44,7 +44,7 @@ fmt.Print(markers)
 - [x] Markers
 - [ ] Microsoft
 - [x] Mixes
-- [ ] OPML
+- [x] OPML
 - [ ] Preferences
 - [x] Profile
 - [x] Search
