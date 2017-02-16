@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/k0kubun/pp"
-	"github.com/mitakeck/feedly/feedly"
+	"github.com/mitakeck/feedly"
 )
 
 func main() {
@@ -21,11 +21,16 @@ func main() {
 	// ------
 
 	// Search : golang
-	profile, err := feedly.Search("golang")
+	search, err := feedly.Search("golang")
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	pp.Print(profile)
+	pp.Print(search)
+
+	// ------
+
+	// Download OPML
+	feedly.OPML("opml.xml")
 
 }
