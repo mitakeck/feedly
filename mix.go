@@ -53,13 +53,17 @@ type MixesResponse struct {
 }
 
 // Mix : https://developer.feedly.com/v3/mixes/
-func (f *Feedly) Mix(streamID string) (MixesResponse, error) {
+func (f *Feedly) Mix(streamID string, options ...url.Values) (MixesResponse, error) {
 	result := &MixesResponse{}
 	if streamID == "" {
 		return *result, fmt.Errorf("streamID is required")
 	}
-	_, err := f.request("GET", mixesURL, result, url.Values{
+	option := url.Values{
 		"streamId": {streamID},
-	})
+	}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", mixesURL, result, option)
 	return *result, err
 }

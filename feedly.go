@@ -93,6 +93,7 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 	return v, nil
 }
 
+// Download : download file
 func (f *Feedly) Download(suburl string, fileName string) (int64, error) {
 	output, err := os.Create(fileName)
 	if err != nil {
@@ -126,4 +127,13 @@ func (f *Feedly) Download(suburl string, fileName string) (int64, error) {
 	}
 
 	return n, nil
+}
+
+func (f *Feedly) setOption(option *url.Values, input url.Values) error {
+	for key, values := range input {
+		for _, value := range values {
+			option.Add(key, value)
+		}
+	}
+	return nil
 }

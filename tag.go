@@ -10,8 +10,12 @@ type TagResponse []struct {
 }
 
 // Tag : https://developer.feedly.com/v3/tags/
-func (f *Feedly) Tag() (TagResponse, error) {
+func (f *Feedly) Tag(options ...url.Values) (TagResponse, error) {
 	result := &TagResponse{}
-	_, err := f.request("GET", tagURL, result, url.Values{})
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", tagURL, result, option)
 	return *result, err
 }

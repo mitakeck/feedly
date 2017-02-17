@@ -18,8 +18,12 @@ type SubscriptionsResponse []struct {
 }
 
 // Subscriptions : https://developer.feedly.com/v3/subscriptions/
-func (f Feedly) Subscriptions() (SubscriptionsResponse, error) {
+func (f Feedly) Subscriptions(options ...url.Values) (SubscriptionsResponse, error) {
 	result := &SubscriptionsResponse{}
-	_, err := f.request("GET", subscriptionsURI, result, url.Values{})
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", subscriptionsURI, result, option)
 	return *result, err
 }

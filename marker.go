@@ -13,8 +13,12 @@ type MarkersConuntsResponse struct {
 }
 
 // MarkersCount : https://developer.feedly.com/v3/markers/
-func (f *Feedly) MarkersCount() (MarkersConuntsResponse, error) {
+func (f *Feedly) MarkersCount(options ...url.Values) (MarkersConuntsResponse, error) {
 	result := &MarkersConuntsResponse{}
-	_, err := f.request("GET", markerCountURI, result, url.Values{})
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", markerCountURI, result, option)
 	return *result, err
 }

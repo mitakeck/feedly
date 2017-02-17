@@ -21,12 +21,16 @@ type FeedResponse struct {
 }
 
 // Feed : https://developer.feedly.com/v3/feeds/
-func (f *Feedly) Feed(feedID string) (FeedResponse, error) {
+func (f *Feedly) Feed(feedID string, options ...url.Values) (FeedResponse, error) {
 	result := &FeedResponse{}
 	if feedID == "" {
 		return *result, fmt.Errorf("feedID is required")
 	}
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
 	u := feedURL + "/" + url.QueryEscape(feedID)
-	_, err := f.request("GET", u, result, url.Values{})
+	_, err := f.request("GET", u, result, option)
 	return *result, err
 }

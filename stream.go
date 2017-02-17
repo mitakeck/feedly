@@ -59,17 +59,25 @@ type StreamContentsResponse struct {
 }
 
 // StreamID : https://developer.feedly.com/v3/streams/
-func (f *Feedly) StreamID(streamID string) (StreamIDsResponse, error) {
+func (f *Feedly) StreamID(streamID string, options ...url.Values) (StreamIDsResponse, error) {
 	result := &StreamIDsResponse{}
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
 	esid := url.QueryEscape(streamID)
-	_, e := f.request("GET", fmt.Sprintf(streamIDURL, esid), result, nil)
+	_, e := f.request("GET", fmt.Sprintf(streamIDURL, esid), result, option)
 	return *result, e
 }
 
 // StreamContent : https://developer.feedly.com/v3/streams/
-func (f *Feedly) StreamContent(streamID string) (StreamContentsResponse, error) {
+func (f *Feedly) StreamContent(streamID string, options ...url.Values) (StreamContentsResponse, error) {
 	result := &StreamContentsResponse{}
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
 	esid := url.QueryEscape(streamID)
-	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, nil)
+	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, option)
 	return *result, e
 }

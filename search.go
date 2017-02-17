@@ -21,13 +21,17 @@ type SearchResponse struct {
 }
 
 // Search : https://developer.feedly.com/v3/search/
-func (f *Feedly) Search(query string) (SearchResponse, error) {
+func (f *Feedly) Search(query string, options ...url.Values) (SearchResponse, error) {
 	result := &SearchResponse{}
 	if query == "" {
 		return *result, fmt.Errorf("Search query is required")
 	}
-	_, err := f.request("GET", searchURL, result, url.Values{
+	option := url.Values{
 		"query": {query},
-	})
+	}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", searchURL, result, option)
 	return *result, err
 }

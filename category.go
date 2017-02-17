@@ -10,8 +10,12 @@ type CategoriesResponse []struct {
 }
 
 // Categories : https://developer.feedly.com/v3/categories/
-func (f *Feedly) Categories() (CategoriesResponse, error) {
+func (f *Feedly) Categories(options ...url.Values) (CategoriesResponse, error) {
 	result := &CategoriesResponse{}
-	_, err := f.request("GET", categoriesURI, result, url.Values{})
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, err := f.request("GET", categoriesURI, result, option)
 	return *result, err
 }

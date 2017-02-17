@@ -1,6 +1,9 @@
 package feedly
 
-import "fmt"
+import (
+	"fmt"
+	"net/url"
+)
 
 // EntriesResponse : GET /v3/entries/:entryId
 type EntriesResponse struct {
@@ -58,8 +61,12 @@ type EntriesResponse struct {
 }
 
 // Entry : https://developer.feedly.com/v3/entries/
-func (f *Feedly) Entry(entryID string) (EntriesResponse, error) {
+func (f *Feedly) Entry(entryID string, options ...url.Values) (EntriesResponse, error) {
 	result := &EntriesResponse{}
-	_, e := f.request("GET", fmt.Sprintf(entruesURL, entryID), result, nil)
+	option := url.Values{}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, e := f.request("GET", fmt.Sprintf(entruesURL, entryID), result, option)
 	return *result, e
 }
