@@ -3,6 +3,7 @@ package feedly
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 )
 
 // StreamIDsResponse : GET /v3/streams/ids?streamId=:streamId
@@ -67,9 +68,49 @@ func (f *Feedly) StreamID(streamID string) (StreamIDsResponse, error) {
 }
 
 // StreamContent : https://developer.feedly.com/v3/streams/
-func (f *Feedly) StreamContent(streamID string) (StreamContentsResponse, error) {
+func (f *Feedly) StreamContent(streamID string, options ...func(*Feedly, *url.Values) error) (StreamContentsResponse, error) {
 	result := &StreamContentsResponse{}
+	o := url.Values{}
+	for _, opt := range options {
+		if err := opt(f, &o); err != nil {
+			return *result, err
+		}
+	}
 	esid := url.QueryEscape(streamID)
-	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, nil)
+	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, o)
 	return *result, e
+}
+
+// Count : set api option count
+func (f *Feedly) Count(count int) func(*Feedly, *url.Values) error {
+	return func(f *Feedly, option *url.Values) error {
+		return f.setCount(count, option)
+	}
+}
+
+func (f *Feedly) setCount(count int, param *url.Values) error {
+	if count < 0 || 10000 < count {
+		return fmt.Errorf("Invalid param `count`. it is must be [1 10000] : %d", count)
+	}
+	param.Add("count", strconv.Itoa(count))
+	return nil
+}
+
+// Ranked : set api option ranked
+func (f *Feedly) Ranked(ranked string) func(*Feedly, *url.Values) error {
+	return func(f *Feedly, option *url.Values) error {
+		return f.setRanked(ranked, option)
+	}
+}
+
+func (f *Feedly) setRanked(ranked string, param *url.Values) error {
+	switch ranked {
+	case "newest":
+		fallthrough
+	case "oldest":
+		param.Add("ranked", ranked)
+		return nil
+	default:
+		return fmt.Errorf("Invalid param `ranked`. it is must be  'newest' or 'oldest' : %s", ranked)
+	}
 }

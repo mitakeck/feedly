@@ -22,15 +22,17 @@ func main() {
 
 	// get grobal all stream id
 	var grobalStreamID string
+	var unreadCount int
 	for _, marker := range markers.Unreadcounts {
 		if strings.HasSuffix(marker.ID, "global.all") {
 			grobalStreamID = marker.ID
+			unreadCount = marker.Count
 			break
 		}
 	}
 
 	// get grobal all stream content
-	streams, _ := feedly.StreamContent(grobalStreamID)
+	streams, _ := feedly.StreamContent(grobalStreamID, feedly.Count(unreadCount), feedly.Ranked("newest"))
 
 	// show feed content
 	for _, item := range streams.Items {
@@ -38,5 +40,5 @@ func main() {
 	}
 
 	// download OPML
-	feedly.OPML("opml.xml")
+	// feedly.OPML("opml.xml")
 }
