@@ -32,6 +32,9 @@ const (
 	tagURL           = "tags"
 	feedURL          = "feeds"
 	opmlURL          = "opml"
+	entruesURL       = "entries/%s"
+	streamIDURL      = "streams/%s/ids"
+	streamContentURL = "streams/%s/contents"
 
 	tokensFile = ".feedly-token"
 	codeFile   = ".feedly-code"

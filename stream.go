@@ -1,6 +1,9 @@
 package feedly
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 // StreamIDsResponse : GET /v3/streams/ids?streamId=:streamId
 type StreamIDsResponse struct {
@@ -59,7 +62,7 @@ type StreamContentsResponse struct {
 func (f *Feedly) StreamID(streamID string) (StreamIDsResponse, error) {
 	result := &StreamIDsResponse{}
 	esid := url.QueryEscape(streamID)
-	_, e := f.request("GET", "streams/"+esid+"/ids", result, nil)
+	_, e := f.request("GET", fmt.Sprintf(streamIDURL, esid), result, nil)
 	return *result, e
 }
 
@@ -67,6 +70,6 @@ func (f *Feedly) StreamID(streamID string) (StreamIDsResponse, error) {
 func (f *Feedly) StreamContent(streamID string) (StreamContentsResponse, error) {
 	result := &StreamContentsResponse{}
 	esid := url.QueryEscape(streamID)
-	_, e := f.request("GET", "streams/"+esid+"/contents", result, nil)
+	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, nil)
 	return *result, e
 }

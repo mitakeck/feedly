@@ -1,5 +1,7 @@
 package feedly
 
+import "fmt"
+
 // EntriesResponse : GET /v3/entries/:entryId
 type EntriesResponse struct {
 	Author    string `json:"author"`
@@ -58,6 +60,6 @@ type EntriesResponse struct {
 // Entry : https://developer.feedly.com/v3/entries/
 func (f *Feedly) Entry(entryID string) (EntriesResponse, error) {
 	result := &EntriesResponse{}
-	_, e := f.request("GET", "entries/"+entryID, result, nil)
+	_, e := f.request("GET", fmt.Sprintf(entruesURL, entryID), result, nil)
 	return *result, e
 }
