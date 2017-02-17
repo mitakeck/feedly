@@ -32,7 +32,8 @@ const (
 	tagURL           = "tags"
 	feedURL          = "feeds"
 	opmlURL          = "opml"
-	entruesURL       = "entries/%s"
+	entryURL         = "entries/%s"
+	entriesURL       = "entries/.mget"
 	streamIDURL      = "streams/%s/ids"
 	streamContentURL = "streams/%s/contents"
 
@@ -75,6 +76,19 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 			return nil, fmt.Errorf("Unable to fetch url (%s) : %v", u, resErr)
 		}
 	case "POST":
+		slc, _ := json.Marshal(param)
+		req, err := http.NewRequest(method, u, strings.NewReader(string(slc)))
+		if err != nil {
+			return nil, fmt.Errorf("Unable to create request (%s) : %v", u, err)
+		}
+		req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
+		req.Header.Set("Content-Type", "application/json")
+		var resErr error
+		res, resErr = client.Do(req)
+		if resErr != nil {
+			return nil, fmt.Errorf("Unable to fetch url (%s) : %v", u, resErr)
+		}
+	case "AUTH":
 		var resErr error
 		res, resErr = http.PostForm(u, param)
 		if resErr != nil {

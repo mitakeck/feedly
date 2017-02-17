@@ -77,7 +77,7 @@ func (f *Feedly) getAccessToken(code string) (AuthTokenResponse, error) {
 
 	if os.IsNotExist(e) {
 		_, err := f.request(
-			"POST",
+			"AUTH",
 			accessTokenURI,
 			at,
 			url.Values{

@@ -67,6 +67,20 @@ func (f *Feedly) Entry(entryID string, options ...url.Values) (EntriesResponse, 
 	for _, input := range options {
 		f.setOption(&option, input)
 	}
-	_, e := f.request("GET", fmt.Sprintf(entruesURL, entryID), result, option)
+	_, e := f.request("GET", fmt.Sprintf(entryURL, entryID), result, option)
+	return *result, e
+}
+
+// Entries : https://developer.feedly.com/v3/entries/
+func (f *Feedly) Entries(entryIDs []string, options ...url.Values) ([]EntriesResponse, error) {
+	result := &([]EntriesResponse{})
+	option := url.Values{}
+	for _, entryID := range entryIDs {
+		option.Add("data", entryID)
+	}
+	for _, input := range options {
+		f.setOption(&option, input)
+	}
+	_, e := f.request("POST", entriesURL, result, option)
 	return *result, e
 }
