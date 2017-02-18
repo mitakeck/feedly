@@ -28,6 +28,7 @@ func (f *Feedly) Auth() (AuthTokenResponse, error) {
 	if os.Getenv("FEEDLY_ACCESS_TOKEN") != "" {
 		accessToken := os.Getenv("FEEDLY_ACCESS_TOKEN")
 		result.AccessToken = &accessToken
+		f.authToken = &result
 		return result, nil
 	}
 

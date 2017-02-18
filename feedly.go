@@ -58,7 +58,7 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 	log.Printf("http request %s (%s)\n", method, u)
 	res := &http.Response{}
 
-	accessToken := *f.authToken.AccessToken
+	accessToken := string(*f.authToken.AccessToken)
 	if accessToken == "" && method != "AUTH" {
 		return v, fmt.Errorf("requred Auth()")
 	}

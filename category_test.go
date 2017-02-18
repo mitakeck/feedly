@@ -7,7 +7,11 @@ import (
 
 func TestCategory(t *testing.T) {
 	f := Feedly{}
-	f.Auth()
+	_, errauth := f.Auth()
+	if errauth != nil {
+		log.Print(errauth)
+		t.Error("erro Feedly.Auth()")
+	}
 	_, err := f.Categories()
 	if err != nil {
 		log.Print(err)
