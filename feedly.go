@@ -58,6 +58,10 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 	log.Printf("http request %s (%s)\n", method, u)
 	res := &http.Response{}
 
+	if f.authToken == nil && method != "AUTH" {
+		return v, fmt.Errorf("requred Auth()")
+	}
+
 	switch method {
 	case "GET":
 		url, err := url.Parse(u)
