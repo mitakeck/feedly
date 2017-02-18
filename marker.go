@@ -17,7 +17,9 @@ func (f *Feedly) MarkersCount(options ...url.Values) (MarkersConuntsResponse, er
 	result := &MarkersConuntsResponse{}
 	option := url.Values{}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	_, err := f.request("GET", markerCountURI, result, option)
 	return *result, err

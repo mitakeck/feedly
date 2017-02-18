@@ -30,7 +30,9 @@ func (f *Feedly) Search(query string, options ...url.Values) (SearchResponse, er
 		"query": {query},
 	}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	_, err := f.request("GET", searchURL, result, option)
 	return *result, err

@@ -63,7 +63,9 @@ func (f *Feedly) StreamID(streamID string, options ...url.Values) (StreamIDsResp
 	result := &StreamIDsResponse{}
 	option := url.Values{}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	esid := url.QueryEscape(streamID)
 	_, e := f.request("GET", fmt.Sprintf(streamIDURL, esid), result, option)
@@ -75,7 +77,9 @@ func (f *Feedly) StreamContent(streamID string, options ...url.Values) (StreamCo
 	result := &StreamContentsResponse{}
 	option := url.Values{}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	esid := url.QueryEscape(streamID)
 	_, e := f.request("GET", fmt.Sprintf(streamContentURL, esid), result, option)

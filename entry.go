@@ -79,7 +79,9 @@ func (f *Feedly) Entries(entryIDs []string, options ...url.Values) ([]EntriesRes
 		option.Add("data", entryID)
 	}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	_, e := f.request("POST", entriesURL, result, option)
 	return *result, e

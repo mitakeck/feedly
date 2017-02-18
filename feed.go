@@ -28,7 +28,9 @@ func (f *Feedly) Feed(feedID string, options ...url.Values) (FeedResponse, error
 	}
 	option := url.Values{}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	u := feedURL + "/" + url.QueryEscape(feedID)
 	_, err := f.request("GET", u, result, option)

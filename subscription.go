@@ -22,7 +22,9 @@ func (f Feedly) Subscriptions(options ...url.Values) (SubscriptionsResponse, err
 	result := &SubscriptionsResponse{}
 	option := url.Values{}
 	for _, input := range options {
-		f.setOption(&option, input)
+		if err := f.setOption(&option, input); err != nil {
+			return *result, err
+		}
 	}
 	_, err := f.request("GET", subscriptionsURI, result, option)
 	return *result, err

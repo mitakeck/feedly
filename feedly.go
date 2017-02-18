@@ -146,7 +146,11 @@ func (f *Feedly) Download(suburl string, fileName string) (int64, error) {
 func (f *Feedly) setOption(option *url.Values, input url.Values) error {
 	for key, values := range input {
 		for _, value := range values {
-			option.Add(key, value)
+			if option.Get(key) == "" {
+				option.Add(key, value)
+			} else {
+				return fmt.Errorf("Duplicate url.Values key (%s)", key)
+			}
 		}
 	}
 	return nil
