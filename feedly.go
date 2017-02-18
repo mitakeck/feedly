@@ -58,7 +58,12 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 	log.Printf("http request %s (%s)\n", method, u)
 	res := &http.Response{}
 
-	if f.authToken == nil && method != "AUTH" {
+	accessToken := os.Getenv("FEEDLY_ACCESS_TOKEN")
+
+	if accessToken != "" && f.authToken != nil {
+		accessToken = *f.authToken.AccessToken
+	}
+	if accessToken == "" && method != "AUTH" {
 		return v, fmt.Errorf("requred Auth()")
 	}
 
@@ -73,7 +78,7 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 		if err != nil {
 			return nil, fmt.Errorf("Unable to create request (%s) : %v", url.String(), err)
 		}
-		req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+accessToken)
 		var resErr error
 		res, resErr = client.Do(req)
 		if resErr != nil {
@@ -85,7 +90,7 @@ func (f *Feedly) request(method string, suburl string, v interface{}, param url.
 		if err != nil {
 			return nil, fmt.Errorf("Unable to create request (%s) : %v", u, err)
 		}
-		req.Header.Set("Authorization", "Bearer "+*f.authToken.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+accessToken)
 		req.Header.Set("Content-Type", "application/json")
 		var resErr error
 		res, resErr = client.Do(req)
