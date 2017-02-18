@@ -24,6 +24,13 @@ type AuthTokenResponse struct {
 // Auth : 認証処理群
 func (f *Feedly) Auth() (AuthTokenResponse, error) {
 	result := AuthTokenResponse{}
+
+	if os.Getenv("FEEDLY_ACCESS_TOKEN") != "" {
+		accessToken := os.Getenv("FEEDLY_ACCESS_TOKEN")
+		result.AccessToken = &accessToken
+		return result, nil
+	}
+
 	code, err := f.getCode()
 	if err != nil {
 		return result, fmt.Errorf("Fail to getCode : %v", err)
