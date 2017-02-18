@@ -1,32 +1,18 @@
 package feedly
 
 import (
-	"log"
 	"net/url"
-	"strings"
 	"testing"
 )
 
 func TestDuplicateOption(t *testing.T) {
 	f := Feedly{}
-	f.Auth()
-
-	// get markers
-	markers, _ := f.MarkersCount()
-
-	// get grobal all stream id
-	var grobalStreamID string
-	for _, marker := range markers.Unreadcounts {
-		if strings.HasSuffix(marker.ID, "global.all") {
-			grobalStreamID = marker.ID
-			break
-		}
+	opt := url.Values{
+		"key": {"value"},
 	}
-	log.Println("stream id : ", grobalStreamID)
-	// get grobal all stream content
-	_, err := f.StreamID(grobalStreamID, url.Values{
-		"streamId": {"dup"}, // error : key duplicate
-	})
+	err := f.setOption(&url.Values{
+		"key": {"dup value"},
+	}, opt)
 
 	if err == nil {
 		t.Errorf("duplicate option")
