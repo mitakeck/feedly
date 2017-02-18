@@ -1,6 +1,6 @@
 # feedly
 
-![https://circleci.com/gh/mitakeck/feedly.svg?style=shield&circle-token=:circle-token](https://circleci.com/gh/mitakeck/feedly.svg?style=shield&circle-token=:circle-token)
+[![CircleCI](https://circleci.com/gh/mitakeck/feedly.svg?style=svg)](https://circleci.com/gh/mitakeck/feedly)
 
 feedly cloud api wrapper for golang : https://developer.feedly.com/
 
