@@ -11,6 +11,6 @@ func TestCategory(t *testing.T) {
 	_, err := f.Categories()
 	if err != nil {
 		log.Print(err)
-		t.Error("error when fetch category")
+		t.Error("error Feedly.Categories()")
 	}
 }
